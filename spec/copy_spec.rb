@@ -11,6 +11,14 @@ describe Copy do
     context "with an invalid api key" do
       let(:consumer_key) { '_your_consumen_key_' }
       let(:consumer_secret) { '_your_consumen_secret_' }
+      let(:access_token) do
+        {
+          token: '_your_user_token_',
+          secret: '_your_secret_token_'
+        }
+      end
+      let(:client) { Copy::Client.new(session) }
+      let(:session) { Copy::Session.new(access_token) }
 
       before(:each) do
         Copy.config do |configuration|
@@ -21,23 +29,23 @@ describe Copy do
       end
 
       it "attempts to get a url with one param" do
-        Copy.request(:get, nil, "user", { param_name: "param_value" })
-        WebMock.should have_requested(:get, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user/?param_name=param_value")
+        Copy.request(:get, nil, 'user', { param_name: "param_value" }, { session: session })
+        WebMock.should have_requested(:get, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user?param_name=param_value")
       end
 
       it "attempts to get a url with more than one param" do
-        Copy.request(:get, nil, "user", { client: "client_id", order: "created_at_desc" })
-        WebMock.should have_requested(:get, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user/?client=client_id&order=created_at_desc")
+        Copy.request(:get, nil, "user", { client: "client_id", order: "created_at_desc" }, { session: session })
+        WebMock.should have_requested(:get, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user?client=client_id&order=created_at_desc")
       end
 
       it "doesn't add a question mark if no params" do
-        Copy.request(:post, nil, "user", {})
-        WebMock.should have_requested(:post, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user/")
+        Copy.request(:post, nil, "user", {}, { session: session })
+        WebMock.should have_requested(:post, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user")
       end
 
-      it "uses correct authentication header if basic auth is setted" do
-        Copy.request(:post, nil, "user", {id: 'new_id'}, { auth_type: :basic })
-        WebMock.should have_requested(:post, "https://%CA%8B%ABj%98%A4@#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user")
+      it "uses the param id to construct the url" do
+        Copy.request(:post, nil, "user", {id: 'new_id'}, { session: session })
+        WebMock.should have_requested(:post, "https://#{Copy::DOMAIN_BASE}.#{Copy::API_BASE}/#{Copy::API_BASE_PATH}/user/new_id")
       end
     end
   end

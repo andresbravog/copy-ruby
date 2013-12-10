@@ -19,7 +19,7 @@ module Copy
         @request_data = []
         @request_data << @info.http_method if @info
         @request_data << api_url
-        if @info && [:post, :put].include?(@info.http_method)
+        unless use_url_params?
           @request_data << body
         end
         @request_data << headers
@@ -27,8 +27,30 @@ module Copy
 
       protected
 
+      # Body params hash
+      #
+      # @return [Hash]
       def body
+        return {} unless @info
         normalize_params(@info.data)
+      end
+
+      # Body params url encoded
+      #
+      # @return [String]
+      def encoded_www_body
+        return '' unless body
+        URI.encode_www_form(body)
+      end
+
+      def use_url_params?
+        return false unless @info
+        case @info.http_method
+        when :post, :put
+          false
+        else
+          true
+        end
       end
 
       def headers
@@ -38,7 +60,13 @@ module Copy
       # Returns the api url foir this request or default
       def api_url
         url = 'https://' + domain + '.' + API_BASE
-        url += @info.url if @info
+        if @info
+          url += @info.url
+          if use_url_params? && !body.empty?
+            url += '?' + encoded_www_body
+          end
+        end
+        url
       end
 
       # Returns the domain for the current request or the default one

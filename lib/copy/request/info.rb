@@ -34,7 +34,7 @@ module Copy
       protected
 
       def has_id?
-        data[:id].nil?
+        !data[:id].nil?
       end
     end
   end
