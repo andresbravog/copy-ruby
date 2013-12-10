@@ -1,6 +1,6 @@
 # [WIP] work in progress!!!
 
-Copy [![Build Status](https://secure.travis-ci.org/andresbravog/copy-ruby.png)](https://travis-ci.org/andresbravog/copy-ruby)
+Copy [![Build Status](https://secure.travis-ci.org/andresbravog/copy-ruby.png)](https://travis-ci.org/andresbravog/copy-ruby) [![Code Climate](https://codeclimate.com/github/andresbravog/copy-ruby.png)](https://codeclimate.com/github/andresbravog/copy-ruby) [![Coverage Status](https://coveralls.io/repos/andresbravog/copy-ruby/badge.png)](https://coveralls.io/r/andresbravog/copy-ruby)
 ======
 
 This is a Ruby wrapper for copy's API.

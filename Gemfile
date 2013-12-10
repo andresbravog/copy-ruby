@@ -6,3 +6,4 @@ gem "rspec"
 gem "rake"
 gem "webmock"
 gem "pry"
+gem 'coveralls', require: false
