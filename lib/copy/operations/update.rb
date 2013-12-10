@@ -7,19 +7,9 @@ module Copy
         # @param [Hash] attributes The attributes that should be updated
         def update_attributes(attributes={})
           id = attributes.delete(:id)
-          response = Copy.request(:put, nil, api_update_url(id), attributes, options_for_request(attributes))
+          response = Copy.request(:put, nil, api_member_url({ id: id }), attributes, options_for_request(attributes))
           self.new(response["data"])
         end
-
-        # URl for the update endpoint
-        # overwrite this in the model if the api is not well named
-        #
-        def api_update_url(id=nil)
-          url = "#{self.name.split("::").last.downcase}"
-          url += "/#{id}" if id
-          url
-        end
-        protected :api_update_url
       end
 
       def self.included(base)
