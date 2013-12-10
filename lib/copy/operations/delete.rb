@@ -7,7 +7,7 @@ module Copy
         # @param [Integer] id The id of the object that gets deleted
         def delete(attributes={})
           id = attributes.delete(:id)
-          response = Copy.request(:delete, nil, api_delete_url(id) , {}, options_for_delete(attributes))
+          response = Copy.request(:delete, nil, api_delete_url(id) , {}, options_for_request(attributes))
           true
         end
 
@@ -18,21 +18,7 @@ module Copy
           "#{self.name.split("::").last.downcase}s/#{id}"
         end
         protected :api_delete_url
-
-        # Options for delete
-        # overwrite this in the model to set security
-        #
-        # @return [Hash]
-        def options_for_delete(attributes)
-          access_token = attributes.delete(:access_token)
-          raise AuthenticationError unless access_token
-          {
-            auth_type: :user_token,
-            auth_token: access_token
-          }
-        end
-        protected :options_for_delete
-      end
+     end
 
       def self.included(base)
         base.extend(ClassMethods)

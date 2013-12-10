@@ -18,6 +18,7 @@ module Copy
   autoload :Session,        "copy/session"
 
   module Operations
+    autoload :Base,   "copy/operations/base"
     autoload :All,    "copy/operations/all"
     autoload :Create, "copy/operations/create"
     autoload :Delete, "copy/operations/delete"

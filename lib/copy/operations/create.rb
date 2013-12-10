@@ -6,7 +6,7 @@ module Copy
         #
         # @param [Hash] attributes The attributes of the created object
         def create(attributes)
-          response = Copy.request(:post, nil, api_create_url, attributes, options_for_create)
+          response = Copy.request(:post, nil, api_create_url, attributes, options_for_request)
           self.new(response)
         end
 
@@ -17,14 +17,6 @@ module Copy
           "#{self.name.split("::").last.downcase}"
         end
         protected :api_create_url
-
-        # Options for create
-        # overwrite this in the model if the api is not well named
-        #
-        # @return [Hash]
-        def options_for_create
-          { auth_type: :basic }
-        end
       end
 
       def self.included(base)

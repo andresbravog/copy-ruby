@@ -1,14 +1,13 @@
 module Copy
   module Operations
     module Update
-
       module ClassMethods
         # Updates a object
         # @param [Integer] id The id of the object that should be updated
         # @param [Hash] attributes The attributes that should be updated
         def update_attributes(attributes={})
           id = attributes.delete(:id)
-          response = Copy.request(:put, nil, api_update_url(id), attributes, options_for_update(attributes))
+          response = Copy.request(:put, nil, api_update_url(id), attributes, options_for_request(attributes))
           self.new(response["data"])
         end
 
@@ -21,19 +20,6 @@ module Copy
           url
         end
         protected :api_update_url
-
-        # Options for update
-        # overwrite this in the model to set security
-        #
-        # @return [Hash]
-        def options_for_update(attributes)
-          access_token = attributes.delete(:access_token)
-          raise AuthenticationError unless access_token
-          {
-            auth_type: :user_token,
-            auth_token: access_token
-          }
-        end
       end
 
       def self.included(base)

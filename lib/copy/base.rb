@@ -1,8 +1,6 @@
 module Copy
   class Base
-    include Copy::Operations::All
-    include Copy::Operations::Create
-    include Copy::Operations::Find
+    include Copy::Operations::Base
 
     attr_accessor :created_time
 

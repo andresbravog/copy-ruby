@@ -7,7 +7,7 @@ module Copy
         # @param [Hash] options Options to pass to the API
         # @return [Array] The available objects
         def all(attributes = {})
-          response = Copy.request(:get, nil, api_all_url , attributes, options_for_all(attributes))
+          response = Copy.request(:get, nil, api_all_url , attributes, options_for_request(attributes))
           results_from response
         end
 
@@ -19,20 +19,6 @@ module Copy
         end
         protected :api_all_url
 
-        # Options for all
-        # overwrite this in the model to set security
-        #
-        # @return [Hash]
-        def options_for_all(attributes)
-          access_token = attributes.delete(:access_token)
-          raise AuthenticationError unless access_token
-          {
-            auth_type: :user_token,
-            auth_token: access_token
-          }
-        end
-
-        private
         def results_from(response)
           results = []
           response.each do |obj|
@@ -40,6 +26,7 @@ module Copy
           end
           results
         end
+        private :results_from
       end
 
       def self.included(base)
