@@ -8,7 +8,7 @@ module Copy
         # @return [Array] The available objects
         def activity(attributes={})
           response = Copy.request(:get, nil, api_member_url(attributes[:id]) + '/@activity' , {}, options_for_request(attributes))
-          self.new(response).revisions
+          self.new(response)
         end
       end
 

@@ -107,6 +107,10 @@ get file revisions
   revisions = file.revisions
   file_revision = client.file(:show, id: revisions.first.id )
 
+delete a file
+
+  client.file(:delete, id: '/copy/readme.txt')
+
 
 Documentation
 =====

@@ -85,6 +85,85 @@ describe Copy::File do
         }
       }
   end
+  let(:valid_activity_attributes) do
+    JSON.parse %{
+        {
+          "id": "/copy/Big%20API%20Changes/API-Changes.md/@activity",
+          "path": "/Big API Changes/API-Changes.md",
+          "name": "Activity",
+          "token": null,
+          "permissions": null,
+          "syncing": false,
+          "public": false,
+          "type": "file",
+          "size": 12670,
+          "date_last_synced": 1365543105,
+          "stub": false,
+          "recipient_confirmed": false,
+          "url": "https://copy.com/web/Big%20API%20Changes/API-Changes.md",
+          "revision_id": "5000",
+          "thumb": null,
+          "share": null,
+          "counts": [
+          ],
+          "links": [
+          ],
+          "revisions": [
+            {
+              "revision_id": "5000",
+              "modified_time": 1365543105,
+              "size": 12670,
+              "latest": true,
+              "conflict": false,
+              "id": "/copy/Big%20API%20Changes/API-Changes.md/@activity/@time:1365543105",
+              "type": "revision",
+              "creator": {
+                "user_id": "1381231",
+                "created_time": 1358175510,
+                "email": "thomashunter@example.com",
+                "first_name": "Thomas",
+                "last_name": "Hunter",
+                "confirmed": true
+              }
+            },
+            {
+              "revision_id": "4900",
+              "modified_time": 1365542000,
+              "size": 12661,
+              "latest": false,
+              "conflict": true,
+              "id": "/copy/Big%20API%20Changes/API-Changes.md/@activity/@time:1365542000",
+              "type": "revision",
+              "creator": {
+                "user_id": "1381231",
+                "created_time": 1358175510,
+                "email": "thomashunter@example.com",
+                "first_name": "Thomas",
+                "last_name": "Hunter",
+                "confirmed": true
+              }
+            },
+            {
+              "revision_id": "4800",
+              "modified_time": 1365543073,
+              "size": 12658,
+              "latest": false,
+              "conflict": false,
+              "id": "/copy/Big%20API%20Changes/API-Changes.md/@activity/@time:1365543073",
+              "type": "revision",
+              "creator": {
+                "user_id": "1381231",
+                "created_time": 1358175510,
+                "email": "thomashunter@example.com",
+                "first_name": "Thomas",
+                "last_name": "Hunter",
+                "confirmed": true
+              }
+            }
+          ]
+        }
+      }
+  end
   let (:file) do
     Copy::File.new(valid_attributes)
   end
@@ -126,6 +205,23 @@ describe Copy::File do
     end
     it 'returns a file with the correct type' do
       expect(file_show.type).to eql('copy')
+    end
+  end
+
+  describe ".activity" do
+    let(:file_activity) { Copy::File.activity( id: '/copy/readme.txt', session: session ) }
+    before :each do
+      allow(Copy).to receive(:request).and_return(valid_activity_attributes)
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific user" do
+      expect(Copy).to receive(:request).with(:get, nil, "meta/copy/readme.txt/@activity", {}, { session: session })
+      file_activity
+    end
+    it 'returns a file with the correct revision_id' do
+      expect(file_activity.revision_id).to eql('5000')
+    end
+    it 'returns a file with the correct revisons data' do
+      expect(file_activity.revisions.first.class).to eql(Copy::Revision)
     end
   end
 
