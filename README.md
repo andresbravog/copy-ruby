@@ -21,94 +21,80 @@ and require it
 
     require "copy"
 
-and set up your api_key
+and set up your app credentials
 
-    Copy.api_key = "_your_application_api_key_"
+    Copy.config do |configuration|
+      configuration[:consumer_key] = '_your_consumer_key_'
+      configuration[:consumer_secret] = '_your_consumer_secret_'
+    end
+
+in fact this last step is optional (yes! we support multiple applications) but if as all humans you use only one copy app is easy to do it like this.
 
 
 Oauth
 =====
 
-*[Copy oauth2 API documentation](https://signnow.atlassian.net/wiki/display/SAPI/REST+Endpoints#RESTEndpoints-POST/oauth2)*
+*[Copy oauth2 API documentation](https://www.copy.com/developer/documentation#authentication)*
 
-Creating a oauth token:
+using omniauth? :+1: good choice, just try this gem
 
-    client = Signnow::Client.authenticate(
-      email: 'yournewuser@email.com', # required
-      password: 'user_password', # required
+  *[plexinc/omniauth-copy](https://github.com/plexinc/omniauth-copy)*
+
+not using omniauth,? no prob oauth implementation comming soon
+
+  ...
+
+
+Client
+======
+
+Everything starts with the client, once you have the user credentials you should create a session and a client to start interaction with the API
+
+    session = Copy::Session.new(
+      token: '_your_user_token_',
+      secret: '_your_user_secret_'
     )
+    client = Copy::Client.new(session)
 
-    # Now you can perform any user api call inside the clien wrapper
-    client.perform! do |token|
-      Signnow::User.show(access_token: token)
-    end
+Now you can perform any user api call inside the clien wrapper
 
+    client.user(:show)
+
+If you have multiple applications or you just want to ve explicit use the application credentials inside the session creation
+
+    session = Copy::Session.new(
+      token: '_your_user_token_',
+      secret: '_your_user_secret_',
+      consumer_key: '_your_app_key_',
+      consumer_secret: '_your_app_secret'
+    )
+    client = Copy::Client.new(session)
 
 Users
 =====
 
-*[SignNow users API documentation](https://signnow.atlassian.net/wiki/display/SAPI/REST+Endpoints#RESTEndpoints-/user)*
+*[Copy users API documentation](https://www.copy.com/developer/documentation#api-calls/profile)*
 
-Creating a user:
+Showing user profile:
 
-    user = Singnow::User.create(
-      email: 'yournewuser@email.com', # required
-      password: 'new_password', # required
-      first_name: 'john', # optional
-      last_name: 'doe', # optional
-    )
+    user = client.user(:show)
 
-Store the acess_token
+Updating user (only last_name or first_name)
 
-    token = user.access_token
-
-Generate a client with the access token
-
-    client = Signnow::Client.new(token)
-
-Showing a user:
-
-    client.perform! |token|
-      Singnow::User.show(access_token: token)
-    end
-
-
-Documents
-=====
-
-*[SignNow documents API documentation](https://signnow.atlassian.net/wiki/display/SAPI/REST+Endpoints#RESTEndpoints-/document)*
-
-List user documents:
-
-    client.perform! |token|
-      Singnow::Document.all(access_token: token)
-    end
-
-Show a docuemnt:
-
-    client.perform! |token|
-      Singnow::Document.show(id: 'document_id', access_token: token)
-    end
-
-Download a docuemnt:
-
-    client.perform! |token|
-      Singnow::Document.download(id: 'document_id', access_token: token)
-    end
-
+    user = client.user(:update, { first_name: 'New name', last_name: 'New last name'})
 
 Documentation
 =====
 
-*[SignNow developers page](https://developers.signnow.com)*
+*[Copy developers page](https://www.copy.com/developer/signup/)*
 
-*[SignNow API documentation](https://signnow.atlassian.net/wiki/display/SAPI/REST+Endpoints)*
+*[Copy API documentation](https://www.copy.com/developer/documentation)*
 
 
 Requirements
 =====
 
-This gem requires at least Ruby 1.9 and faces version 1 of SignNow's API.
+This gem requires at least Ruby 1.9 and faces version 1 of Copy's API.
 
 Bugs
 ======
