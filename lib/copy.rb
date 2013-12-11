@@ -14,6 +14,7 @@ module Copy
 
   autoload :Base,           "copy/base"
   autoload :User,           "copy/user"
+  autoload :File,           "copy/file"
   autoload :Client,         "copy/client"
   autoload :Session,        "copy/session"
 

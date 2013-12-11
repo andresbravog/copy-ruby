@@ -83,6 +83,25 @@ Updating user (only last_name or first_name)
 
     user = client.user(:update, { first_name: 'New name', last_name: 'New last name'})
 
+Files
+=====
+
+*[Copy files API documentation](https://www.copy.com/developer/documentation#api-calls/filesystem)*
+
+Showing root dir:
+
+    file = client.file(:show)
+
+listing dir children:
+
+files has children if is a dir and is not sutbbed (already being listed form his father)
+
+    if file.is_dir?
+      file = client.file(:show, id: file.id ) if file.stubbed?
+      file.children
+    end
+
+
 Documentation
 =====
 
