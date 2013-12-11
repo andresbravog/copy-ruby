@@ -85,4 +85,35 @@ describe Copy::User do
       expect(user_show.last_name).to eql('Hunter')
     end
   end
+
+  describe ".update" do
+    let(:update_attributes) do
+      {
+        first_name: 'New Firt name',
+        last_name: 'New Last name'
+      }
+    end
+    let(:user_update) do
+      Copy::User.update(update_attributes.merge(session: session))
+    end
+    before :each do
+      allow(Copy).to receive(:request).and_return(valid_attributes.merge(update_attributes))
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific user" do
+      expect(Copy).to receive(:request).with(:put, nil, "user", update_attributes, { session: session })
+      user_update
+    end
+    it 'returns a user with the correct email' do
+      expect(user_update.email).to eql('thomashunter@example.com')
+    end
+    it 'returns a user with the correct id' do
+      expect(user_update.id).to eql('1381231')
+    end
+    it 'returns a user with the correct first_name' do
+      expect(user_update.first_name).to eql('New Firt name')
+    end
+    it 'returns a user with the correct last_name' do
+      expect(user_update.last_name).to eql('New Last name')
+    end
+  end
 end

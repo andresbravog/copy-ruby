@@ -5,23 +5,16 @@ module Copy
         # Updates a object
         # @param [Integer] id The id of the object that should be updated
         # @param [Hash] attributes The attributes that should be updated
-        def update_attributes(attributes={})
+        def update(attributes={})
           id = attributes.delete(:id)
-          response = Copy.request(:put, nil, api_member_url({ id: id }), attributes, options_for_request(attributes))
-          self.new(response["data"])
+          session = attributes.delete(:session)
+          response = Copy.request(:put, nil, api_member_url(id), attributes, options_for_request(session: session))
+          self.new(response)
         end
       end
 
       def self.included(base)
         base.extend(ClassMethods)
-      end
-
-      # Updates a object
-      #
-      # @param [Hash] attributes The attributes that should be updated
-      def update_attributes(attributes)
-        response = Copy.request(:put, nil, "#{self.class.name.split("::").last.downcase}/#{id}", attributes)
-        set_attributes(response["data"])
       end
     end
   end

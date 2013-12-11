@@ -20,7 +20,7 @@ module Copy
         @request_data << @info.http_method if @info
         @request_data << api_url
         unless use_url_params?
-          @request_data << body
+          @request_data << body_json
         end
         @request_data << headers
       end
@@ -30,17 +30,25 @@ module Copy
       # Body params hash
       #
       # @return [Hash]
-      def body
+      def body_hash
         return {} unless @info
         normalize_params(@info.data)
+      end
+
+      # Json encoded body
+      #
+      # @return [String]
+      def body_json
+        return '' unless body_hash
+        JSON.generate(body_hash)
       end
 
       # Body params url encoded
       #
       # @return [String]
       def encoded_www_body
-        return '' unless body
-        URI.encode_www_form(body)
+        return '' unless body_hash
+        URI.encode_www_form(body_hash)
       end
 
       def use_url_params?
@@ -62,7 +70,7 @@ module Copy
         url = 'https://' + domain + '.' + API_BASE
         if @info
           url += @info.url
-          if use_url_params? && !body.empty?
+          if use_url_params? && !body_hash.empty?
             url += '?' + encoded_www_body
           end
         end
