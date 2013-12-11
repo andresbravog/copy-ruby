@@ -225,6 +225,20 @@ describe Copy::File do
     end
   end
 
+  describe ".delete" do
+    let(:file_delete) { Copy::File.delete( id: '/copy/readme.txt', session: session ) }
+    before :each do
+      allow(Copy).to receive(:request).and_return(true)
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific user" do
+      expect(Copy).to receive(:request).with(:delete, nil, "meta/copy/readme.txt", {}, { session: session })
+      file_delete
+    end
+    it 'returns true' do
+      expect(file_delete).to be_true
+    end
+  end
+
   describe "#is_dir?" do
     it 'rerurns false if file is a file' do
       allow(file).to receive(:type).and_return('file')
