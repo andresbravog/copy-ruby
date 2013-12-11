@@ -101,6 +101,12 @@ files has children if is a dir and is not sutbbed (already being listed form his
       file.children
     end
 
+get file revisions
+
+  file = client.file(:activity, id: '/copy/readme.txt')
+  revisions = file.revisions
+  file_revision = client.file(:show, id: revisions.first.id )
+
 
 Documentation
 =====

@@ -15,17 +15,19 @@ module Copy
   autoload :Base,           "copy/base"
   autoload :User,           "copy/user"
   autoload :File,           "copy/file"
+  autoload :Revision,       "copy/revision"
   autoload :Client,         "copy/client"
   autoload :Session,        "copy/session"
 
   module Operations
-    autoload :Base,   "copy/operations/base"
-    autoload :All,    "copy/operations/all"
-    autoload :Create, "copy/operations/create"
-    autoload :Delete, "copy/operations/delete"
-    autoload :Find,   "copy/operations/find"
-    autoload :Show,   "copy/operations/show"
-    autoload :Update, "copy/operations/update"
+    autoload :Base,       "copy/operations/base"
+    autoload :All,        "copy/operations/all"
+    autoload :Create,     "copy/operations/create"
+    autoload :Delete,     "copy/operations/delete"
+    autoload :Find,       "copy/operations/find"
+    autoload :Show,       "copy/operations/show"
+    autoload :Update,     "copy/operations/update"
+    autoload :Activity,   "copy/operations/activity"
   end
 
   module Request
