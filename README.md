@@ -112,6 +112,29 @@ delete a file
   client.file(:delete, id: '/copy/readme.txt')
 
 
+Links
+=====
+
+*[Copy links API documentation](https://www.copy.com/developer/documentation#api-calls/links)*
+
+List all links created by the user
+
+```Ruby
+  links = client.file(:all)
+```
+
+Show a link
+
+```Ruby
+  link = client.file(:show, id: links.first.id )
+```
+
+List link recipients. Returns a list of users
+
+```Ruby
+  link.recipients if !link.public
+```
+
 Documentation
 =====
 

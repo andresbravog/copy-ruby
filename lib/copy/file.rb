@@ -65,14 +65,9 @@ module Copy
       # Redefining the files api endpoint
       #
       def api_member_url(id=nil, method=nil)
-        case method
-        when :show, :activity
-          url = api_resource_name(method)
-          url += "#{id}" if id
-          url
-        else
-          super(id, method)
-        end
+        url = api_resource_name(method)
+        url += "#{id}" if id
+        url
       end
 
       # Redefining the files api resource name

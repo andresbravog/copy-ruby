@@ -231,7 +231,7 @@ describe Copy::File do
       allow(Copy).to receive(:request).and_return(true)
     end
     it "makes a new GET request using the correct API endpoint to receive a specific user" do
-      expect(Copy).to receive(:request).with(:delete, nil, "meta/copy/readme.txt", {}, { session: session })
+      expect(Copy).to receive(:request).with(:delete, nil, "files/copy/readme.txt", {}, { session: session })
       file_delete
     end
     it 'returns true' do

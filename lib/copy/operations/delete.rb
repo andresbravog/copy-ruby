@@ -7,7 +7,12 @@ module Copy
         # @param [Integer] id The id of the object that gets deleted
         def delete(attributes={})
           id = attributes.delete(:id)
-          response = Copy.request(:delete, nil, api_member_url(id) , {}, options_for_request(attributes))
+          response = Copy.request( :delete,
+            nil,
+            api_member_url(id, :delete),
+            {},
+            options_for_request(attributes)
+          )
           true
         end
      end
