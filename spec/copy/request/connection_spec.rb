@@ -57,7 +57,7 @@ describe Copy::Request::Connection do
       connection.request_data.should eq(
         [ :post,
           "https://api.copy.com/some/path",
-          "{\"email\":\"abc_abc.com\",\"event_types[0]\":\"user.created\",\"event_types[1]\":\"user.failed\",\"event_types[2]\":\"team.created\",\"event_types[3]\":\"documents.available\"}",
+          "{\"email\":\"abc_abc.com\",\"event_types\":[\"user.created\",\"user.failed\",\"team.created\",\"documents.available\"]}",
           {"X-Api-Version"=>"1"}
         ]
       )
