@@ -18,6 +18,7 @@ module Copy
       super(attributes)
       parse_children
       parse_revisions
+      parse_links
     end
 
     def is_dir?
@@ -48,16 +49,43 @@ module Copy
     end
     protected :parse_revisions
 
+    def parse_links
+      return unless links
+      results = []
+      links.each do |obj|
+        results << Copy::Link.new(obj)
+      end
+      @links = results
+    end
+    protected :parse_revisions
+
     class << self
-      # Redefining the documents api endpoint
+      protected
+
+      # Redefining the files api endpoint
       #
-      def api_member_url(id=nil)
-          "meta"
-          url = "meta"
+      def api_member_url(id=nil, method=nil)
+        case method
+        when :show, :activity
+          url = api_resource_name(method)
           url += "#{id}" if id
           url
+        else
+          super(id, method)
+        end
       end
-      protected :api_member_url
+
+      # Redefining the files api resource name
+      # depending on the interaction
+      #
+      def api_resource_name(method=nil)
+        case method
+        when :show, :activity
+          'meta'
+        else
+          super(method)
+        end
+      end
     end
 
   end

@@ -13,23 +13,30 @@ module Copy
           }
         end
 
+        protected
+
         # URl for the member endpoints
         # overwrite this in the model if the api is not well named
         #
-        def api_member_url(id=nil)
-          url = "#{self.name.split("::").last.downcase}"
+        def api_member_url(id=nil, method=nil)
+          url = api_resource_name(method)
           url += "/#{id}" if id
           url
         end
-        protected :api_member_url
 
         # URl for the collection endpoints
         # overwrite this in the model if the api is not well named
         #
         def api_collection_url
-          "#{self.name.split("::").last.downcase}"
+          api_resource_name
         end
-        protected :api_collection_url
+
+        # resource name
+        # overwrite this in the model if the api is not well named
+        #
+        def api_resource_name(method=nil)
+          "#{self.name.split("::").last.downcase}s"
+        end
       end
 
       def self.included(base)

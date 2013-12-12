@@ -17,6 +17,7 @@ module Copy
   autoload :File,           "copy/file"
   autoload :Revision,       "copy/revision"
   autoload :Client,         "copy/client"
+  autoload :Link,           "copy/link"
   autoload :Session,        "copy/session"
 
   module Operations

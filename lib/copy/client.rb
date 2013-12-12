@@ -1,6 +1,6 @@
 module Copy
   class Client
-    RESOURCES = [:user, :file, :email]
+    RESOURCES = [:user, :file, :email, :link]
 
     attr_reader :session
 

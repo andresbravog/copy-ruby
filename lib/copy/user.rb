@@ -10,5 +10,15 @@ module Copy
       @id || @user_id
     end
 
+    class << self
+
+      # TODO: should be users
+      #
+      def api_resource_name(method=nil)
+        'user'
+      end
+
+    end
+
   end
 end

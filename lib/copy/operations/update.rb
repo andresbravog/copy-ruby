@@ -8,7 +8,7 @@ module Copy
         def update(attributes={})
           id = attributes.delete(:id)
           session = attributes.delete(:session)
-          response = Copy.request(:put, nil, api_member_url(id), attributes, options_for_request(session: session))
+          response = Copy.request(:put, nil, api_member_url(id, :updated), attributes, options_for_request(session: session))
           self.new(response)
         end
       end

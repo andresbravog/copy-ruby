@@ -7,7 +7,8 @@ module Copy
         # @param [Hash] options Options to pass to the API
         # @return [Array] The available objects
         def all(attributes = {})
-          response = Copy.request(:get, nil, api_collection_url , attributes, options_for_request(attributes))
+          session = attributes.delete(:session)
+          response = Copy.request(:get, nil, api_collection_url , attributes, options_for_request(session: session))
           results_from response
         end
 
