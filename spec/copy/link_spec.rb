@@ -160,4 +160,79 @@ describe Copy::Link do
     end
   end
 
+
+  describe ".meta" do
+    let(:valid_attributes_meta) do
+      JSON.parse(%{
+        {
+          "id": "/links/e6aauE2WodKj",
+          "path": "/e6aauE2WodKj",
+          "name": "Artwork",
+          "token": "e6aauE2WodKj",
+          "creator_id": "1381231",
+          "permissions": "read",
+          "syncing": false,
+          "public": true,
+          "type": "link",
+          "size": null,
+          "date_last_synced": null,
+          "stub": false,
+          "recipient_confirmed": false,
+          "counts": [
+            ],
+            "children_count": null,
+            "mime_type": "",
+            "url": "http://copy.local/e6aauE2WodKj",
+            "links": [
+              ],
+              "thumb": null,
+              "share": null,
+              "children": [
+                {
+                  "id": "/links/e6aauE2WodKj/Artwork",
+                  "path": "/e6aauE2WodKj/Artwork",
+                  "name": "Artwork",
+                  "link_name": null,
+                  "token": null,
+                  "creator_id": null,
+                  "permissions": null,
+                  "public": false,
+                  "type": "dir",
+                  "size": null,
+                  "date_last_synced": null,
+                  "stub": true,
+                  "recipient_confirmed": false,
+                  "object_available": true,
+                  "counts": [
+                    ],
+                    "mime_type": "",
+                    "list_index": 0,
+                    "url": "http://copy.local/e6aauE2WodKj/Artwork",
+                    "revision": 0,
+                    "thumb": null,
+                    "links": [
+                    ]
+                  }
+                ]
+              }
+        })
+    end
+    let(:link_meta) { Copy::Link.meta(id: 'wFIK8aMIDvh2', session: session) }
+    before :each do
+      allow(Copy).to receive(:request).and_return(valid_attributes_meta)
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific link" do
+      expect(Copy).to receive(:request).with(:get, nil, "meta/links/wFIK8aMIDvh2", {}, { session: session })
+      link_meta
+    end
+
+    it "returns a link object" do
+      expect(link_meta.class).to eql(Copy::Link)
+    end
+
+    it "parses children as files" do
+      expect(link_meta.children.first.class).to eql(Copy::File)
+    end
+  end
+
 end

@@ -29,6 +29,7 @@ module Copy
     autoload :Show,       "copy/operations/show"
     autoload :Update,     "copy/operations/update"
     autoload :Activity,   "copy/operations/activity"
+    autoload :Meta,       "copy/operations/meta"
   end
 
   module Request

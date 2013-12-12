@@ -179,6 +179,13 @@ Delete a existing link
   client.link( :delete, id: link.id )
 ```
 
+Get metadata of a link
+
+```Ruby
+  link = client.link( :meta, id: link.id )
+  files = link.children
+```
+
 
 Documentation
 =====
