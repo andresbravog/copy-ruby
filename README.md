@@ -15,18 +15,25 @@ Usage
 
 First, you've to install the gem
 
-    gem install copy
+```Ruby
+  gem install copy
+```
 
 and require it
 
-    require "copy"
+```Ruby
+  require "copy"
+```
 
 and set up your app credentials
 
-    Copy.config do |configuration|
-      configuration[:consumer_key] = '_your_consumer_key_'
-      configuration[:consumer_secret] = '_your_consumer_secret_'
-    end
+
+```Ruby
+  Copy.config do |configuration|
+    configuration[:consumer_key] = '_your_consumer_key_'
+    configuration[:consumer_secret] = '_your_consumer_secret_'
+  end
+```
 
 in fact this last step is optional (yes! we support multiple applications) but if as all humans you use only one copy app is easy to do it like this.
 
@@ -50,25 +57,31 @@ Client
 
 Everything starts with the client, once you have the user credentials you should create a session and a client to start interaction with the API
 
-    session = Copy::Session.new(
-      token: '_your_user_token_',
-      secret: '_your_user_secret_'
-    )
-    client = Copy::Client.new(session)
+```Ruby
+  session = Copy::Session.new(
+    token: '_your_user_token_',
+    secret: '_your_user_secret_'
+  )
+  client = Copy::Client.new(session)
+```
 
 Now you can perform any user api call inside the clien wrapper
 
-    client.user(:show)
+```Ruby
+  client.user(:show)
+```
 
 If you have multiple applications or you just want to ve explicit use the application credentials inside the session creation
 
-    session = Copy::Session.new(
-      token: '_your_user_token_',
-      secret: '_your_user_secret_',
-      consumer_key: '_your_app_key_',
-      consumer_secret: '_your_app_secret'
-    )
-    client = Copy::Client.new(session)
+```Ruby
+  session = Copy::Session.new(
+    token: '_your_user_token_',
+    secret: '_your_user_secret_',
+    consumer_key: '_your_app_key_',
+    consumer_secret: '_your_app_secret'
+  )
+  client = Copy::Client.new(session)
+```
 
 Users
 =====
@@ -77,11 +90,15 @@ Users
 
 Showing user profile:
 
-    user = client.user(:show)
+```Ruby
+  user = client.user(:show)
+```
 
 Updating user (only last_name or first_name)
 
-    user = client.user(:update, { first_name: 'New name', last_name: 'New last name'})
+```Ruby
+  user = client.user(:update, { first_name: 'New name', last_name: 'New last name'})
+```
 
 Files
 =====
@@ -90,26 +107,34 @@ Files
 
 Showing root dir:
 
-    file = client.file(:show)
+```Ruby
+ file = client.file(:show)
+```
 
 listing dir children:
 
 files has children if is a dir and is not sutbbed (already being listed form his father)
 
-    if file.is_dir?
-      file = client.file(:show, id: file.id ) if file.stubbed?
-      file.children
-    end
+```Ruby
+  if file.is_dir?
+    file = client.file(:show, id: file.id ) if file.stubbed?
+    file.children
+  end
+```
 
 get file revisions
 
+```Ruby
   file = client.file(:activity, id: '/copy/readme.txt')
   revisions = file.revisions
   file_revision = client.file(:show, id: revisions.first.id )
+```
 
 delete a file
 
+```Ruby
   client.file(:delete, id: '/copy/readme.txt')
+```
 
 
 Links
@@ -134,6 +159,26 @@ List link recipients. Returns a list of users
 ```Ruby
   link.recipients if !link.public
 ```
+
+Create a new link
+
+```Ruby
+  link = client.link( :create,
+    name: 'My new fancy link',
+    public: true,
+    paths: [
+      '/path/to/the/file_1.txt',
+      '/path/to/the/file_2.txt'
+    ]
+  )
+```
+
+Delete a existing link
+
+```Ruby
+  client.link( :delete, id: link.id )
+```
+
 
 Documentation
 =====

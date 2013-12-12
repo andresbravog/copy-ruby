@@ -3,6 +3,7 @@ module Copy
     include Copy::Operations::All
     include Copy::Operations::Show
     include Copy::Operations::Delete
+    include Copy::Operations::Create
 
     attr_accessor :id, :name, :public, :url, :url_short, :creator_id,
       :created_time, :object_count, :confirmation_required, :status,

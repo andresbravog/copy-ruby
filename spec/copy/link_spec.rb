@@ -106,4 +106,58 @@ describe Copy::Link do
     end
   end
 
+  describe ".create" do
+    let(:create_attributes) do
+      {
+        public: true,
+        name: "My Cool Shared Files",
+        paths: [
+          "/path/to/file.txt"
+        ]
+      }
+    end
+    let(:valid_create_response) do
+      JSON.parse(%{
+        {
+          "id": "MBrss3roGDk4",
+          "name": "My Cool Shared Files",
+          "public": true,
+          "url": "https://copy.com/MBrss3roGDk4",
+          "url_short": "https://copy.com/MBrss3roGDk4",
+          "creator_id": "1381231",
+          "confirmation_required": false,
+          "status": "viewed",
+          "permissions": "read",
+          "recipients": [
+          ]
+        }
+      })
+    end
+    let(:link_create) { Copy::Link.create(create_attributes.merge(session: session)) }
+    before :each do
+      allow(Copy).to receive(:request).and_return(valid_create_response)
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific link" do
+      expect(Copy).to receive(:request).with(:post, nil, "links", create_attributes, { session: session })
+      link_create
+    end
+    it 'returns a link with the correct name' do
+      expect(link_create.name).to eql('My Cool Shared Files')
+    end
+    it 'returns a link with the correct public' do
+      expect(link_create.public).to eql(true)
+    end
+  end
+
+  describe ".delete" do
+    let(:link_delete) { Copy::Link.delete(id: 'wFIK8aMIDvh2', session: session) }
+    before :each do
+      allow(Copy).to receive(:request).and_return({})
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific link" do
+      expect(Copy).to receive(:request).with(:delete, nil, "links/wFIK8aMIDvh2", {}, { session: session })
+      link_delete
+    end
+  end
+
 end

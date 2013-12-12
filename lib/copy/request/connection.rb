@@ -32,7 +32,7 @@ module Copy
       # @return [Hash]
       def body_hash
         return {} unless @info
-        normalize_params(@info.data)
+        @info.data
       end
 
       # Json encoded body

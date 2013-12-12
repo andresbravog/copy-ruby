@@ -6,7 +6,8 @@ module Copy
         #
         # @param [Hash] attributes The attributes of the created object
         def create(attributes)
-          response = Copy.request(:post, nil, api_collecton_url, attributes, options_for_request)
+          session = attributes.delete(:session)
+          response = Copy.request(:post, nil, api_collection_url, attributes, options_for_request(session: session))
           self.new(response)
         end
       end
