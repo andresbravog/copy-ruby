@@ -75,5 +75,35 @@ describe Copy::Link do
     end
   end
 
+  describe ".all" do
+    let(:link_all) { Copy::Link.all( session: session ) }
+    before :each do
+      allow(Copy).to receive(:request).and_return([valid_attributes])
+    end
+    it "makes a new GET request using the correct API endpoint to receive links" do
+      expect(Copy).to receive(:request).with(:get, nil, "links", {}, { session: session })
+      link_all
+    end
+    it 'returns a array of links' do
+      expect(link_all.first.class).to eql(Copy::Link)
+    end
+    it 'returns the correct links' do
+      expect(link_all.first.id).to eql('wFIK8aMIDvh2')
+    end
+  end
+
+  describe ".show" do
+    let(:link_show) { Copy::Link.show( id: 'wFIK8aMIDvh2', session: session ) }
+    before :each do
+      allow(Copy).to receive(:request).and_return(valid_attributes)
+    end
+    it "makes a new GET request using the correct API endpoint to receive a specific link" do
+      expect(Copy).to receive(:request).with(:get, nil, "links/wFIK8aMIDvh2", {}, { session: session })
+      link_show
+    end
+    it 'returns a link with the correct id' do
+      expect(link_show.id).to eql('wFIK8aMIDvh2')
+    end
+  end
 
 end
