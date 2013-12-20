@@ -4,6 +4,7 @@ module Copy
     include Copy::Operations::Show
     include Copy::Operations::Delete
     include Copy::Operations::Activity
+    include Copy::Operations::Create
 
     TYPES = [ :file, :dir, :root, :copy, :inbox ]
 
@@ -60,6 +61,11 @@ module Copy
     protected :parse_revisions
 
     class << self
+      # Create operation overwrite to parse file first
+      def create(attrs)
+        super(parse_file(attrs))
+      end
+
       protected
 
       # Redefining the files api endpoint
@@ -80,6 +86,47 @@ module Copy
         else
           super(method)
         end
+      end
+
+      # Parses the uploaded file to make the correct api request
+      #
+      # @param attributes [Hash] attributes to parse
+      # @return [Hash] parsed attributes hash
+      def parse_file(attrs)
+        return attrs unless attrs[:file]
+        attrs[:file_attrs] = {}
+        if attrs[:file].kind_of?(::File) or attrs[:file].kind_of?(::Tempfile) then
+          attrs[:file_attrs][:name] = attrs[:file].respond_to?(:original_filename) ? attrs[:file].original_filename : ::File.basename(attrs[:file].path)
+          attrs[:file_attrs][:local_path] = attrs[:file].path
+        elsif attrs[:file].kind_of?(String) then
+          attrs[:file_attrs][:local_path] = attrs[:file]
+          attrs[:file] = ::File.new(attrs[:file])
+          attrs[:file_attrs][:name] = ::File.basename(attrs[:file_attrs][:local_path])
+        elsif attrs[:file].kind_of?(StringIO) then
+          raise(ArgumentError, "Must specify the :as option when uploading from StringIO") unless attrs[:as]
+          attrs[:file_attrs][:local_path] = attrs[:as]
+
+          # hack for bug in UploadIO
+          class << file
+            attr_accessor :path
+          end
+          file.path = attrs[:file]
+        else
+          raise ArgumentError, "local_file must be a File, StringIO, or file path"
+        end
+
+        attrs[:file_attrs][:name] = ::File.basename(attrs.delete(:as)) if attrs[:as]
+
+        attrs
+      end
+
+      # Yiha! Api REST
+      #
+      def api_collection_url(attrs={})
+        path = attrs.delete(:path)
+        url = super(attrs)
+        url += '/' + path if path
+        url
       end
     end
 

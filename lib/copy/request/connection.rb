@@ -1,3 +1,5 @@
+require 'net/http/post/multipart'
+
 module Copy
   module Request
     class Connection
@@ -12,7 +14,25 @@ module Copy
 
       def request
         return unless access_token
-        access_token.send(*request_data)
+        if use_body_file?
+          ::File.open(body_file_attrs[:local_path]) do |file|
+            req = Net::HTTP::Post::Multipart.new(
+                api_url,
+               'file' => UploadIO.new(
+                  file,
+                  'application/octet-stream',
+                  body_file_attrs[:name]
+                )
+            )
+            access_token.sign! req
+            # Todo finish this to work over https
+            Net::HTTP.start('api.copy.com', 443) do |https|
+              https.request(req)
+            end
+          end
+        else
+          access_token.send(*request_data)
+        end
       end
 
       def set_request_data
@@ -43,12 +63,21 @@ module Copy
         JSON.generate(body_hash)
       end
 
+      def body_file_attrs
+        body_hash[:file_attrs] || {}
+      end
+
       # Body params url encoded
       #
       # @return [String]
       def encoded_www_body
         return '' unless body_hash
         URI.encode_www_form(body_hash)
+      end
+
+      def use_body_file?
+        return false if use_url_params?
+        body_hash.has_key?(:file)
       end
 
       def use_url_params?

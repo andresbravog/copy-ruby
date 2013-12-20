@@ -239,6 +239,29 @@ describe Copy::File do
     end
   end
 
+  describe ".create" do
+    let(:file) do
+      path = File.expand_path(File.join(File.dirname(__FILE__), "../fixtures/hola.txt"))
+      File.open(path)
+    end
+    let(:file_create) { Copy::File.create( path: 'path', session: session, file: file ) }
+    context 'under control' do
+      before :each do
+        allow(Copy).to receive(:request).and_return(valid_attributes)
+      end
+      it "makes a new GET request using the correct API endpoint to receive a specific file" do
+        expect(Copy).to receive(:request).with(:post, nil, "files/path", { file: file }, { session: session })
+        file_create
+      end
+      it 'returns true' do
+        expect(file_create.class).to be(Copy::File)
+      end
+    end
+    it 'test' do
+      file_create
+    end
+  end
+
   describe "#is_dir?" do
     it 'rerurns false if file is a file' do
       allow(file).to receive(:type).and_return('file')

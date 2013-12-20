@@ -27,7 +27,7 @@ module Copy
         # URl for the collection endpoints
         # overwrite this in the model if the api is not well named
         #
-        def api_collection_url
+        def api_collection_url(attrs={})
           api_resource_name
         end
 
