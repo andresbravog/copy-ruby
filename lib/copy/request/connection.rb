@@ -26,8 +26,11 @@ module Copy
             )
             access_token.sign! req
             # Todo finish this to work over https
-            Net::HTTP.start('api.copy.com', 443) do |https|
-              https.request(req)
+            http = Net::HTTP.new("api.copy.com", Net::HTTP.https_default_port)
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            http.use_ssl = true
+            http.start do |http|
+              http.request(req)
             end
           end
         else
