@@ -133,9 +133,14 @@ get file revisions
 delete a file
 
 ```Ruby
-  client.file(:delete, id: '/copy/readme.txt')
+  client.file(:delete, id: '/test/readme.txt')
 ```
 
+create a file. You need to provide a valid copy directory and a file (currently we accept File, Tempfile, String or StringIO objects )
+
+```Ruby
+  file = client.file(:create, path: '/test/readme.txt', file: File.open('path/to/file'))
+```
 
 Links
 =====

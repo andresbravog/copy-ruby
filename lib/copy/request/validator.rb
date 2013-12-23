@@ -11,7 +11,8 @@ module Copy
       def validated_data_for(incoming_response)
         self.response = incoming_response
         verify_response_code
-        info.data = JSON.parse(response.body)
+        info.data = JSON.parse(response.body) if response.code.to_i != 204
+        info.data ||= {}
         validate_response_data
         info.data
       end

@@ -245,20 +245,41 @@ describe Copy::File do
       File.open(path)
     end
     let(:file_create) { Copy::File.create( path: 'path', session: session, file: file ) }
-    context 'under control' do
-      before :each do
-        allow(Copy).to receive(:request).and_return(valid_attributes)
-      end
-      it "makes a new GET request using the correct API endpoint to receive a specific file" do
-        expect(Copy).to receive(:request).with(:post, nil, "files/path", { file: file }, { session: session })
-        file_create
-      end
-      it 'returns true' do
-        expect(file_create.class).to be(Copy::File)
-      end
+    before :each do
+      allow(Copy).to receive(:request).and_return(valid_attributes)
     end
-    it 'test' do
+    it "makes a new GET request using the correct API endpoint to receive a specific file" do
+      expect(Copy).to receive(:request).with(
+        :post,
+        nil,
+        "files/path",
+        {
+          :file_attrs => {
+            :name=> ::File.basename(file.path),
+            :local_path=> file.path
+          },
+          :file => file
+        },
+        { session: session }
+      )
       file_create
+    end
+    it 'returns true' do
+      expect(file_create.class).to be(Copy::File)
+    end
+  end
+
+  describe ".delete" do
+    let(:file_delete) { Copy::File.delete( id: '/path/to/file.txt', session: session) }
+    before :each do
+      allow(Copy).to receive(:request).and_return({})
+    end
+    it "makes a new GET request using the correct API endpoint to delete a specific file" do
+      expect(Copy).to receive(:request).with(:delete, nil, "files/path/to/file.txt", {}, { session: session })
+      file_delete
+    end
+    it 'returns true' do
+      expect(file_delete).to be_true
     end
   end
 

@@ -25,6 +25,7 @@ module Copy
                 )
             )
             access_token.sign! req
+            req['X-Api-Version'] = '1'
             # Todo finish this to work over https
             http = Net::HTTP.new("api.copy.com", Net::HTTP.https_default_port)
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
