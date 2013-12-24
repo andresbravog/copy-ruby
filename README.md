@@ -225,3 +225,7 @@ Copyright
 ======
 
 Copyright (c) 2012-2013 andresbravog Internet Service GmbH, Andres Bravo. See LICENSE for details.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/andresbravog/copy-ruby/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
