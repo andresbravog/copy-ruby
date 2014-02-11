@@ -42,8 +42,8 @@ module Copy
         error = case code
                 when 1021, 1024  then ObjectNotFound.new(message)
                 when 1300, 1303  then BadRequest.new(message)
+                when 2000        then AuthenticationError.new(message)
                 else
-                  binding.pry
                   APIError.new(message)
                 end
         fail error
