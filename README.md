@@ -166,7 +166,7 @@ List link recipients. Returns a list of users
 Create a new link
 
 ```Ruby
-  link = client.link( :create,
+  link = client.link(:create,
     name: 'My new fancy link',
     public: true,
     paths: [
@@ -179,14 +179,21 @@ Create a new link
 Delete a existing link
 
 ```Ruby
-  client.link( :delete, id: link.id )
+  client.link(:delete, id: link.id )
 ```
 
 Get metadata of a link
 
 ```Ruby
-  link = client.link( :meta, id: link.id )
+  link = client.link(:meta, id: link.id )
   files = link.children
+```
+
+Get a download link url
+
+```Ruby
+  link = client.link(:show, id: link.id )
+  files = link.download_url
 ```
 
 

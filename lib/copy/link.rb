@@ -21,6 +21,11 @@ module Copy
       parse_children
     end
 
+    def download_url
+      return unless url
+      "#{url}?download=1"
+    end
+
     protected
 
     def parse_recipients
