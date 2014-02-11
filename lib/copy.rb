@@ -42,7 +42,11 @@ module Copy
 
   class CopyError < StandardError; end
   class AuthenticationError < CopyError; end
+  class NotFound            < CopyError; end
   class APIError            < CopyError; end
+  class ObjectNotFound      < APIError; end
+  class BadRequest     < APIError; end
+
 
   # Gives configuration abilities
   # to setup api_key and api_secret

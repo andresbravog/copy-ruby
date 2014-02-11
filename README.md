@@ -1,5 +1,3 @@
-# [WIP] work in progress!!!
-
 Copy [![Build Status](https://secure.travis-ci.org/andresbravog/copy-ruby.png)](https://travis-ci.org/andresbravog/copy-ruby) [![Code Climate](https://codeclimate.com/github/andresbravog/copy-ruby.png)](https://codeclimate.com/github/andresbravog/copy-ruby) [![Coverage Status](https://coveralls.io/repos/andresbravog/copy-ruby/badge.png)](https://coveralls.io/r/andresbravog/copy-ruby)
 ======
 
@@ -35,7 +33,7 @@ and set up your app credentials
   end
 ```
 
-in fact this last step is optional (yes! we support multiple applications) but if as all humans you use only one copy app is easy to do it like this.
+in fact this last step is optional (yes! we support multiple applications) but if as most fo the humans you use only one copy app, this is the easyest way to go.
 
 
 Oauth
@@ -224,4 +222,4 @@ Note on Patches/Pull Requests
 Copyright
 ======
 
-Copyright (c) 2012-2013 andresbravog Internet Service GmbH, Andres Bravo. See LICENSE for details.
+Copyright (c) 2012-2013 andresbravog Internet Service, Andres Bravo. See LICENSE for details.

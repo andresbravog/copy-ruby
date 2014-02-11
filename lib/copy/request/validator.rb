@@ -22,10 +22,31 @@ module Copy
       def verify_response_code
         raise AuthenticationError if response.code.to_i == 401
         raise APIError if response.code.to_i >= 500
+        raise NotFound if response.code.to_i >= 404
       end
 
       def validate_response_data
-        raise APIError.new(info.data["error"]) if info.data.is_a?(Hash) && info.data["error"] 
+        body ||= info.data
+        if body.is_a?(Hash)
+          if body['error']
+            handle_api_error(body['error'], body['message'])
+          elsif body['errors']
+            body['errors'].each do |error|
+              handle_api_error(error['code'], error['message'])
+            end
+          end
+        end
+      end
+
+      def handle_api_error(code, message)
+        error = case code
+                when 1021, 1024  then ObjectNotFound.new(message)
+                when 1300, 1303  then BadRequest.new(message)
+                else
+                  binding.pry
+                  APIError.new(message)
+                end
+        fail error
       end
     end
   end
