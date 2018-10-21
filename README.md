@@ -14,7 +14,7 @@ Usage
 First, you've to install the gem
 
 ```Ruby
-  gem install copy
+  gem install copy-ruby 
 ```
 
 and require it
